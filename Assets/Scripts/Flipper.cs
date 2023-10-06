@@ -15,10 +15,9 @@ public class Flipper : MonoBehaviour
     [SerializeField] float yRotation;
     private float _timer;
 
-    // Start is called before any Update (Fucking lies)
+    // Start is called before any Update
     void Start()
     {
-        Debug.Log(transform.rotation.eulerAngles.y);
         yRotation = transform.rotation.eulerAngles.y;
         b_Active = false;
     }
@@ -81,13 +80,16 @@ public class Flipper : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        Debug.LogWarning($"This object collided with {other.gameObject.name}");
+
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (b_Active)
-            other.gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0.0f, 0.0f, hitStrength), ForceMode.VelocityChange);
-        Debug.LogWarning($"This object triggered with {other.gameObject.name}");
+        {
+            other.attachedRigidbody.velocity.Set(other.attachedRigidbody.velocity.x, 0.0f, 0.0f);
+            other.attachedRigidbody.AddForce(new Vector3(0.0f, 0.0f, hitStrength), ForceMode.VelocityChange);
+        }
+        Debug.Log($"Flipped the {other.gameObject.name}!");
     }
 }
